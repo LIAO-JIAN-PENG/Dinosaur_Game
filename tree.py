@@ -4,8 +4,8 @@ from main import SCREEN_WIDTH, SCREEN_HEIGHT
 from dinosaur import Dinosaur
 
 d = Dinosaur()
-d_height = d.height
-d_width = d.width
+d_height = 50
+d_width = 50
 
 class Tree(pygame.sprite.Sprite):
     def __init__(self):
