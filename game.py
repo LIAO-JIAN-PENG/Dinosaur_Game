@@ -1,6 +1,6 @@
 import pygame
 from pygame.locals import *
-from dinosaur import Dinosaur
+from dinosaur import Dinosaur, Contact
 from tree import Tree
 from main import SCREEN_HEIGHT, SCREEN_WIDTH
 import random
@@ -21,11 +21,13 @@ pygame.time.set_timer(ADDTREE, 1200)
 
 # Object
 dinosaur = Dinosaur()
+contact = Contact()
 trees = pygame.sprite.Group()
 
 ## object container
 all_sprites = pygame.sprite.Group()
 all_sprites.add(dinosaur)
+all_sprites.add(contact)
 
 # game running
 # running set
@@ -52,17 +54,19 @@ while running:
     pressed_keys = pygame.key.get_pressed()
     # Update
     dinosaur.update(pressed_keys)
+    contact.update(dinosaur.rect.center[0], dinosaur.rect.bottom, dinosaur.squat)
     trees.update()
     
     # screen update
     screen.fill((255, 255, 255))
 
-    dinosaur.show()
-
     # screen blit
     # screen.blit(dinosaur.surf, dinosaur.rect)
     for entity in all_sprites:
         screen.blit(entity.surf, entity.rect)
+    
+    if pygame.sprite.spritecollideany(contact, trees):
+        dinosaur.kill()
 
     pygame.display.flip() # update screen
 

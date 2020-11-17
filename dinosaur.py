@@ -21,6 +21,9 @@ class Dinosaur(pygame.sprite.Sprite):
         self.grav = 0.7
         self.vel = 0
 
+        # self squat state for contact detection
+        self.squat = False
+
         # time counter
         self.index = 0
         # initial animation state
@@ -29,6 +32,9 @@ class Dinosaur(pygame.sprite.Sprite):
     
     # dinosaur move
     def update(self, pressed_key):
+        # for contact detection
+        self.squat = False
+        
         if self.rect.bottom >= GROUND:
             self.vel = 0
             self.surf = self.run_ani.animate(int(self.index) % 3)
@@ -47,6 +53,7 @@ class Dinosaur(pygame.sprite.Sprite):
                 self.rect = self.surf.get_rect(center = (self.x, 0), bottom = GROUND)
                 self.rect.bottom = GROUND
                 self.vel = 0
+                self.squat = True # contact detection
         elif pressed_key[K_SPACE] or pressed_key[K_UP]:
             if self.vel > 0: # if falling don't jump
                 self.vel = self.vel
@@ -62,6 +69,18 @@ class Dinosaur(pygame.sprite.Sprite):
         # animation flip
         self.index += 0.3
         self.index %= 6
-    def show(self):
-        print(self.rect)
-        
+
+class Contact(pygame.sprite.Sprite):
+    def __init__(self):
+        super(Contact, self).__init__() # inherit pygame.sprite.Sprite
+        # self position
+        self.surf = pygame.Surface((25, 50))
+        self.rect = self.surf.get_rect(center = (200, 0), bottom = GROUND)
+    def update(self, dino_x, dino_y, squat_state):
+        self.rect = self.surf.get_rect(center = (dino_x, 0), bottom = dino_y)
+        if squat_state:
+            self.surf = pygame.Surface((65, 30))
+        else:
+            self.surf = pygame.Surface((25, 50))
+        self.surf.set_colorkey((0, 0, 0))
+          
