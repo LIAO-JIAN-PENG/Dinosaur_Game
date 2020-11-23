@@ -17,6 +17,10 @@ class Dinosaur(pygame.sprite.Sprite):
         self.squat = ["./image/dinosaur_-1.png", "./image/dinosaur_-2.png"]
         self.squat_ani = Animate(self.squat, 70, 30) # image, width, height
 
+        # dead
+        self.dead = ["./image/dinosaur_3.png"]
+        self.dead_ani = Animate(self.dead, 50, 50)
+
         # physic attributes
         self.grav = 0.7
         self.vel = 0
@@ -51,7 +55,6 @@ class Dinosaur(pygame.sprite.Sprite):
             else:
                 self.surf = self.squat_ani.animate(int(self.index/1.8)%2)
                 self.rect = self.surf.get_rect(center = (self.x, 0), bottom = GROUND)
-                self.rect.bottom = GROUND
                 self.vel = 0
                 self.squat = True # contact detection
         elif pressed_key[K_SPACE] or pressed_key[K_UP]:
@@ -69,18 +72,22 @@ class Dinosaur(pygame.sprite.Sprite):
         # animation flip
         self.index += 0.3
         self.index %= 6
+    def die(self):
+        self.surf = self.dead_ani.animate(0)
+        if self.rect.bottom == GROUND:
+            self.rect = self.surf.get_rect(center = (self.x, 0), bottom = GROUND)
 
 class Contact(pygame.sprite.Sprite):
     def __init__(self):
         super(Contact, self).__init__() # inherit pygame.sprite.Sprite
         # self position
-        self.surf = pygame.Surface((25, 50))
-        self.rect = self.surf.get_rect(center = (200, 0), bottom = GROUND)
+        self.surf = pygame.Surface((25, 40))
+        self.rect = self.surf.get_rect(center = (200, 0), bottom = GROUND-10)
     def update(self, dino_x, dino_y, squat_state):
-        self.rect = self.surf.get_rect(center = (dino_x, 0), bottom = dino_y)
+        self.rect = self.surf.get_rect(center = (dino_x, 0), bottom = dino_y-10)
         if squat_state:
-            self.surf = pygame.Surface((65, 30))
+            self.surf = pygame.Surface((65, 20))
         else:
-            self.surf = pygame.Surface((25, 50))
+            self.surf = pygame.Surface((25, 40))
         self.surf.set_colorkey((0, 0, 0))
           

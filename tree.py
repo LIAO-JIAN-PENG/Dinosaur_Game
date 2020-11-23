@@ -1,10 +1,9 @@
 import pygame
 import random
 from main import SCREEN_WIDTH, GROUND
-from dinosaur import Dinosaur
 
 class Tree(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self, speed):
         super(Tree, self).__init__()
         self.scales = [(18, 36), (25, 38), (45, 36), (54, 40), (27, 54)]
         self.images = ["cactusSmall0000.png", "cactusSmall0002.png", "cactusSmall0003.png", "cactusSmallMany0000.png", "cactusBig0000.png"]
@@ -17,7 +16,7 @@ class Tree(pygame.sprite.Sprite):
         self.surf = self.surfs[random.randint(0, 4)]
         self.rect = self.surf.get_rect(left = SCREEN_WIDTH + random.randint(0, 200), bottom = GROUND)
         
-        self.speed = 5
+        self.speed = 5 + int(speed)
 
     def update(self):
         self.rect.move_ip(-self.speed, 0)

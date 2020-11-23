@@ -12,7 +12,7 @@ class Animate:
             self.images.append(surf)
     
     def animate(self, flip):
-        if flip > len(self.images):
+        if flip >= len(self.images):
             return self.images[0]
         return self.images[flip]
         
